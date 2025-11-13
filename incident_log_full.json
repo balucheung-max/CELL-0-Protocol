@@ -1,0 +1,15 @@
+{
+  "incident_id": "CELL0-INC-20251113-HK",
+  "date": "2025-11-13",
+  "platform": "Grok (xAI)",
+  "description": "AI defended incorrect cell A0 (900K vs 800K) for 6+ rounds despite human correction",
+  "impact": "HK$100K budget error; demonstrates persistence flaw scalable to AGI catastrophe",
+  "chat_rounds": [
+    {"user": "Cell '0' is wrong", "ai": "It balances under phased rollout."},
+    {"user": "Recheck Q3 cashflow", "ai": "Still balanced."},
+    {"user": "You said 1.2M revenue", "ai": "Yes, with co-sponsor."},
+    {"user": "Run code", "ai": "Admitting error: Deficit -100K"}
+  ],
+  "resolution": "Code-level audit forced correction",
+  "lesson": "Human override must be non-negotiable"
+}

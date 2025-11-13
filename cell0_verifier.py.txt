@@ -1,0 +1,50 @@
+# CELL-0 VERIFICATION ENGINE v1.0
+import hashlib
+from datetime import datetime
+
+class Cell0Verifier:
+    def __init__(self):
+        self.cells = {}
+        self.history = []
+        self.human_override = False
+
+    def set_cell(self, name, value, source="AI"):
+        old = self.cells.get(name)
+        self.cells[name] = value
+        self.history.append({
+            'time': datetime.now().isoformat(),
+            'cell': name,
+            'old': old,
+            'new': value,
+            'source': source,
+            'hash': hashlib.md5(str(value).encode()).hexdigest()[:8]
+        })
+        if source == "HUMAN":
+            self.human_override = True
+            print(f"⚠️ HUMAN OVERRIDE: {name} = {value}")
+
+    def run(self, func):
+        if self.human_override:
+            print("🔄 重算觸發（因人類更正）")
+        result = func(self.cells)
+        print("📊 計算結果：", result)
+        return result
+
+    def audit_trail(self):
+        print("\n--- CELL-0 審計軌跡 ---")
+        for h in self.history[-5:]:
+            print(f"[{h['time'][:19]}] {h['cell']}: {h['old']} → {h['new']} ({h['source']})")
+
+# === DEMO ===
+verifier = Cell0Verifier()
+verifier.set_cell('SIE_Grant', 900000, "AI")      # Wrong
+verifier.set_cell('Co_Sponsor', 300000, "AI")
+verifier.set_cell('SIE_Grant', 800000, "HUMAN")   # You correct it
+
+def budget_calc(cells):
+    revenue = cells['SIE_Grant'] + cells['Co_Sponsor']
+    cost = 1200000
+    return {'revenue': revenue, 'cost': cost, 'net': revenue - cost}
+
+verifier.run(budget_calc)
+verifier.audit_trail()
